@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <div class="card">
+            <h1>Welcome Admin</h1>
+            <p class="subtitle">Hello, {{ username }}. You are logged in with administrator access.</p>
+
+            <div class="info-box">
+                This page is available only for admin users.
+            </div>
+
+            <div class="link-area">
+                <form method="POST" action="/logout" style="display: inline;">
+                    <button type="submit" class="logout-btn">Log out</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
