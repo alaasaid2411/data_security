@@ -1,0 +1,301 @@
+/* Shared stylesheet for Data Security login app */
+
+:root {
+    --bg-start: #020617;
+    --bg-end: #0f172a;
+    --card-bg: rgba(15, 23, 42, 0.92);
+    --card-border: rgba(148, 163, 184, 0.16);
+    --text-primary: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #3b82f6;
+    --accent-dark: #2563eb;
+    --danger: #ef4444;
+    --success: #22c55e;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.22), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.18), transparent 24%),
+        linear-gradient(180deg, var(--bg-start), var(--bg-end));
+    color: var(--text-primary);
+}
+
+
+.login-page,
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.background-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+}
+
+.spongebob-card,
+.card {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 28px;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+    padding: 36px;
+    overflow: hidden;
+}
+
+.spongebob-card::after,
+.card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 60%);
+    pointer-events: none;
+}
+
+.spongebob-card .login-content,
+.card {
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    margin: 0 0 14px;
+    font-size: clamp(2rem, 2.4vw, 2.5rem);
+    line-height: 1.05;
+    color: #f8fafc;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.login-form,
+form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.32);
+    background: rgba(15, 23, 42, 0.7);
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.16);
+    transform: translateY(-1px);
+}
+
+button,
+.login-btn {
+    width: 100%;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover,
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(59, 130, 246, 0.28);
+}
+
+.forgot-link,
+.link-area a {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forgot-link:hover,
+.link-area a:hover {
+    text-decoration: underline;
+}
+
+.info-box {
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    color: #cfe7ff;
+    padding: 18px 20px;
+    border-radius: 18px;
+    margin-bottom: 22px;
+    line-height: 1.7;
+}
+
+.logout-btn {
+    width: auto;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.message {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: rgba(248, 113, 113, 0.12);
+    border: 1px solid rgba(248, 113, 113, 0.2);
+    border-radius: 14px;
+    color: #fecaca;
+    font-weight: 600;
+}
+
+@media (max-width: 540px) {
+
+    .spongebob-card,
+    .card {
+        padding: 24px;
+        border-radius: 24px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .login-page,
+    .page-wrapper {
+        padding: 16px;
+    }
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-image: url("/static/spongebob_login.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-overlay {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.login-card h1 {
+    margin-bottom: 10px;
+    color: #0f4c81;
+}
+
+.subtitle {
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.login-card form {
+    text-align: left;
+}
+
+.login-card label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.login-card input[type="text"],
+.login-card input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.login-card button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-card button:hover {
+    background: #1d4ed8;
+}
+
+.link-area {
+    margin-top: 16px;
+}
+
+.link-area a {
+    color: #0f4c81;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-area a:hover {
+    text-decoration: underline;
+}
+
+.message {
+    margin-top: 16px;
+    color: #b91c1c;
+    font-weight: bold;
+}
