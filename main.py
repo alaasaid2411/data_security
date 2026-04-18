@@ -105,7 +105,7 @@ def user_page():
 
 
 
-
+# the forget password page with the user name 
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
     message = ""
@@ -121,7 +121,7 @@ def forgot_password():
 
     return render_template("forgot_pass.html", message=message)
 
-
+#the reset password page with the user name and the new password
 @app.route("/reset-password/<username>", methods=["GET", "POST"])
 def reset_password(username):
     if request.method == "POST":
@@ -132,7 +132,7 @@ def reset_password(username):
 
     return render_template("reset_pass.html", username=username)
 
-
+#the logout page to log out the user and update the status in the database
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     username = session.get("username")
