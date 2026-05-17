@@ -2,124 +2,161 @@
 
 ## Project Overview
 
-This is a comprehensive Flask-based user authentication and login management system featuring role-based access control, secure password handling, and a modern web interface with Spongebob-themed design. The application provides secure user authentication, password reset functionality, and differentiated access levels for administrators and regular users.
+This project is a Flask web application for user authentication. It was built for a data security class assignment and demonstrates login with username and password, password hashing, role-based access control, password reset, and an SQL database.
 
-## How the Project Works
+The application runs locally on `localhost` and uses SQLite for storing users.
 
-### Architecture
+## Main Features
 
-The application follows a typical Flask web application structure:
+- Login page with username and password.
+- Register page for creating new standard users.
+- Passwords are stored as SHA-256 hashes, not as plaintext.
+- Admin and standard user roles.
+- Admin has a different access page than a regular user.
+- Forgot password flow that creates a new password instead of restoring the old one.
+- Session-based login and logout.
+- User status tracking in the database: `logged_in` or `logged_out`.
+- Error messages for wrong password or missing username.
+- Responsive HTML/CSS interface.
 
-- **Backend**: Python Flask framework handles routing, session management, and business logic
-- **Database**: SQLite database for user data storage
-- **Frontend**: HTML templates with custom CSS styling
-- **Security**: SHA-256 password hashing and session-based authentication
+## Technologies
 
-### Core Components
+- Python
+- Flask
+- SQLite
+- HTML
+- CSS
+- SHA-256 hashing with Python `hashlib`
 
-1. **Flask Application** (`main.py`):
-   - Main application entry point
-   - Route definitions for all pages
-   - Session management
-   - Database interactions
+## File Structure
 
-2. **Database Layer** (`init_db.py`):
-   - SQLite database initialization
-   - User table creation with predefined test accounts
-   - Password hashing utilities
+```text
+project-root/
+|-- main.py
+|-- users.db
+|-- WEB_DESIGN_DESCRIPTION.md
+|-- src/
+    |-- __init__.py
+    |-- README.md
+    |-- app.py
+    |-- auth_service.py
+    |-- database.py
+    |-- init_db.py
+    |-- routes.py
+    |-- security.py
+    |-- styles/
+    |   |-- style1.css
+    |-- templates/
+        |-- login.html
+        |-- register.html
+        |-- admin.html
+        |-- user.html
+        |-- forgot_pass.html
+        |-- reset_pass.html
+```
 
-3. **Web Interface**:
-   - HTML templates in `templates/` folder
-   - CSS styling in `styles/` folder
-   - Responsive design with modern UI elements
+## Layered Design Pattern
 
-### User Flow
+The project is organized into clear layers instead of putting the full implementation inside `main.py`.
 
-1. **Authentication Process**:
-   - User visits the site (redirects to `/login`)
-   - Enters username and password
-   - System hashes password and compares with database
-   - On success: Creates session, updates user status to "logged_in", redirects to appropriate dashboard
-   - On failure: Shows error message
+### Entry Point Layer
 
-2. **Role-Based Access**:
-   - Admin users → `/admin` dashboard
-   - Regular users → `/user` dashboard
-   - Session validation on each protected route
+`main.py`
 
-3. **Password Recovery**:
-   - User enters username on forgot password page
-   - If exists, redirected to reset password page
-   - New password is hashed and stored
-   - Redirected back to login
+- Starts the application.
+- Imports `create_app()`.
+- Does not contain route logic, database logic, or password logic.
 
-4. **Logout Process**:
-   - Updates user status to "logged_out"
-   - Clears session
-   - Redirects to login page
+### Application Factory Layer
 
-## Design and User Interface
+`src/app.py`
 
-### Visual Design Philosophy
+- Creates the Flask application.
+- Connects the templates folder and static CSS folder.
+- Registers all routes.
 
-The application combines professional security features with a fun, engaging user interface featuring:
+### Routes / Controller Layer
 
-- **Spongebob Squarepants Theme**: Full-screen background image with cartoon character theming
-- **Glass-morphism Effects**: Semi-transparent cards with blur effects for modern appearance
-- **Responsive Layout**: Works on desktop and mobile devices
-- **Clean Typography**: Arial font family with clear hierarchy
-- **Color Scheme**:
-  - Primary Blue (#2563eb) for buttons and links
-  - Semi-transparent white cards with blur
-  - Red (#ef4444) for logout buttons and errors
-  - Light blue for informational boxes
+`src/routes.py`
 
-### Page Layouts
+- Contains the HTTP routes.
+- Reads form data from the frontend.
+- Uses the service layer to perform authentication actions.
+- Decides which page to render or where to redirect.
 
-1. **Login Page** (`/login`):
-   - Centered card with username/password fields
-   - "Forgot Password?" link
-   - Error message display area
-   - Spongebob background image
+Examples:
 
-2. **Admin Dashboard** (`/admin`):
-   - Welcome message with username
-   - Information box explaining admin privileges
-   - Red logout button
+- `/login`
+- `/register`
+- `/admin`
+- `/user`
+- `/forgot-password`
+- `/reset-password/<username>`
+- `/logout`
 
-3. **User Dashboard** (`/user`):
-   - Welcome message with username
-   - Information box explaining user access level
-   - Red logout button
+### Service / Business Logic Layer
 
-4. **Forgot Password** (`/forgot-password`):
-   - Username input field
-   - Error handling for non-existent users
+`src/auth_service.py`
 
-5. **Reset Password** (`/reset-password/<username>`):
-   - New password input field
-   - Warning about password security
+- Contains the authentication logic.
+- Checks if a username exists.
+- Checks if the password is correct.
+- Handles password reset.
+- Handles logout status updates.
 
-### Interactive Elements
+This layer connects the routes to the database layer without exposing database details to the routes.
 
-- **Form Validation**: Required fields with visual feedback
-- **Hover Effects**: Buttons lift and change color on hover
-- **Error Messages**: Clear, user-friendly feedback in red
-- **Responsive Design**: Adapts to different screen sizes
+### Database Access Layer
 
-## Technology Stack
+`src/database.py`
 
-- **Backend Framework**: Flask (Python web framework)
-- **Database**: SQLite (lightweight, file-based database)
-- **Security**: SHA-256 password hashing via Python's hashlib
-- **Frontend**: HTML5, CSS3
-- **Styling**: Custom CSS with modern effects (backdrop-filter, blur)
-- **Session Management**: Flask's built-in session handling
-- **Development Environment**: Python virtual environment
+- Contains all direct SQLite operations.
+- Opens connections to `users.db`.
+- Gets users by username.
+- Updates password hashes.
+- Updates user login status.
 
-## Database Schema
+### Security Layer
 
-The application uses a single SQLite table:
+`src/security.py`
+
+- Contains the `PasswordHasher` class.
+- Uses SHA-256 to hash passwords before comparing or saving them.
+- Keeps password hashing inside a dedicated object instead of a standalone function.
+
+### Frontend Layer
+
+`src/templates/` and `src/styles/`
+
+- `templates/` contains the HTML pages.
+- `styles/style1.css` contains the CSS design.
+- The frontend sends form data to the backend routes.
+
+## Request Flow Example
+
+Login request flow:
+
+```text
+Browser form
+-> src/routes.py
+-> src/auth_service.py
+-> src/security.py
+-> src/database.py
+-> users.db
+```
+
+If the login is successful, the user is redirected based on their role:
+
+```text
+admin user -> /admin
+standard user -> /user
+```
+
+## Database
+
+The database is implemented with SQLite in the file `users.db`.
+
+The application uses one table named `users`:
 
 ```sql
 CREATE TABLE users (
@@ -128,173 +165,134 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL,
     status TEXT NOT NULL
-)
+);
 ```
 
-**Fields**:
-- `id`: Auto-incrementing primary key
-- `username`: Unique username (string)
-- `password_hash`: SHA-256 hashed password (string)
-- `role`: User role ("admin" or "user")
-- `status`: Login status ("logged_in" or "logged_out")
+### Initial Users
 
-## Security Features
+The database initialization script creates two users:
 
-### Password Security
-- **SHA-256 Hashing**: Passwords are never stored in plain text
-- **Salt-free Hashing**: Uses direct SHA-256 of password string
-- **No Password Recovery**: Only password reset functionality
+| Username | Password | Role | Notes |
+|---|---|---|---|
+| `admin` | `admin123` | `admin` | First user in the database |
+| `alaa` | `user123` | `user` | Standard user |
 
-### Session Security
-- **Flask Sessions**: Server-side session storage
-- **Secret Key**: Application uses a secret key for session encryption
-- **Session Clearing**: Complete session cleanup on logout
+The passwords above are only the test credentials. In the database itself, the passwords are stored as SHA-256 hashes.
 
-### Access Control
-- **Role-Based Access**: Different dashboards for admin/user roles
-- **Session Validation**: Each protected route checks for valid session
-- **Status Tracking**: Database tracks user login status
+## Application Routes
 
-## Installation and Setup
+| Route | Methods | Description |
+|---|---|---|
+| `/` | GET | Redirects to `/login` |
+| `/login` | GET, POST | Login page |
+| `/register` | GET, POST | Register a new standard user |
+| `/admin` | GET | Admin page, available only for admin users |
+| `/user` | GET | Standard user page |
+| `/forgot-password` | GET, POST | Starts the password reset flow |
+| `/reset-password/<username>` | GET, POST | Creates and saves a new password |
+| `/logout` | GET, POST | Logs out and clears the session |
 
-### Prerequisites
-- Python 3.x installed
-- Virtual environment support
+## How Authentication Works
 
-### Setup Steps
+1. The user enters a username and password on the login page.
+2. The application searches for the username in the SQL database.
+3. The entered password is hashed with SHA-256.
+4. The hash is compared with the saved password hash in the database.
+5. If the credentials are correct:
+   - The username and role are saved in the Flask session.
+   - The user status is updated to `logged_in`.
+   - Admin users are redirected to `/admin`.
+   - Standard users are redirected to `/user`.
+6. If the credentials are wrong, an error message is displayed on the login page.
 
-1. **Clone/Download the Project**:
-   ```bash
-   cd c:\data_security
-   ```
+## Password Reset
 
-2. **Create Virtual Environment**:
-   ```bash
-   python -m venv .venv
-   ```
+The application does not restore or display the old password.
 
-3. **Activate Virtual Environment**:
-   ```powershell
-   .venv\Scripts\Activate.ps1
-   ```
+Instead:
 
-4. **Initialize Database**:
-   ```bash
-   python src/init_db.py
-   ```
+1. The user enters their username in `/forgot-password`.
+2. If the username exists, the user is redirected to a reset page.
+3. The user enters a new password.
+4. The new password is hashed with SHA-256.
+5. The hash replaces the old hash in the database.
 
-5. **Run the Application**:
-   ```bash
-   python main.py
-   ```
+This demonstrates that the original password cannot be recovered from the database.
 
-6. **Access the Application**:
-   - Open browser to: `http://127.0.0.1:5000`
-   - Application will redirect to login page
+## Running the Project
 
-### Test Credentials
+### 1. Create a virtual environment
 
-**Admin Account**:
-- Username: `admin`
-- Password: `admin123`
-
-**User Account**:
-- Username: `alaa`
-- Password: `user123`
-
-## API Routes/Endpoints
-
-| Route | Method | Description | Access |
-|-------|--------|-------------|---------|
-| `/` | GET | Home page (redirects to login) | Public |
-| `/login` | GET/POST | User login page | Public |
-| `/admin` | GET | Admin dashboard | Admin only |
-| `/user` | GET | User dashboard | User only |
-| `/forgot-password` | GET/POST | Password recovery initiation | Public |
-| `/reset-password/<username>` | GET/POST | Password reset page | Public |
-| `/logout` | GET/POST | User logout | Authenticated users |
-
-## Key Functions and Code Structure
-
-### Main Application Functions
-
-- `hash_password(password)`: SHA-256 password hashing
-- `get_user_by_username(username)`: Database user lookup
-- `update_password(username, new_hash)`: Password update
-- `update_user_status(username, status)`: Status tracking
-
-### Route Handlers
-
-- `home()`: Redirects to login
-- `login()`: Handles login form and authentication
-- `admin_page()`: Admin dashboard (protected)
-- `user_page()`: User dashboard (protected)
-- `forgot_password()`: Password recovery start
-- `reset_password(username)`: Password reset form
-- `logout()`: Session cleanup and logout
-
-## Understanding the Code
-
-### Database Operations
-- All database connections use `sqlite3.connect("users.db")`
-- Queries use parameterized statements for security
-- Connections are properly closed after operations
-
-### Session Management
-- User data stored in Flask session: `username` and `role`
-- Session validation on protected routes
-- Complete session clearing on logout
-
-### Password Handling
-- Passwords hashed immediately on input
-- No plain text password storage or transmission
-- Reset functionality creates new hash
-
-### Role-Based Logic
-- Route protection checks `session.get("role")`
-- Different redirect targets based on user role
-- Admin has access to admin dashboard, users to user dashboard
-
-## File Structure
-
-```
-c:\data_security\
-├── main.py                    # Main Flask application
-├── WEB_DESIGN_DESCRIPTION.md  # Design documentation
-├── users.db                   # SQLite database (created by init_db.py)
-└── src\
-    ├── init_db.py            # Database initialization script
-    ├── README.md             # This documentation
-    ├── styles\
-    │   └── style1.css        # Main stylesheet
-    └── templates\
-        ├── login.html        # Login page template
-        ├── admin.html        # Admin dashboard template
-        ├── user.html         # User dashboard template
-        ├── forgot_pass.html  # Forgot password template
-        └── reset_pass.html   # Reset password template
+```powershell
+python -m venv .venv
 ```
 
-## Features Summary
+### 2. Activate the virtual environment
 
-✅ **Secure Authentication** with SHA-256 hashing
-✅ **Role-Based Access Control** (Admin/User)
-✅ **Password Reset Functionality**
-✅ **Session Management** with status tracking
-✅ **Responsive Web Design** with modern UI
-✅ **Spongebob-themed Interface** for engaging UX
-✅ **Glass-morphism Effects** for modern appearance
-✅ **Mobile-Friendly Design**
-✅ **Error Handling** and validation
-✅ **SQLite Database** for data persistence
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-## Development Notes
+### 3. Install Flask
 
-- **Debug Mode**: Application runs with `debug=True` for development
-- **Database Location**: `users.db` created in project root
-- **Template Location**: Templates in `src/templates/`
-- **Static Files**: CSS in `src/styles/`
-- **Secret Key**: Hardcoded for development (should be environment variable in production)
+```powershell
+pip install flask
+```
 
-This project demonstrates secure web development practices combined with modern UI design, making it both functional and visually appealing. The Spongebob theming adds a unique touch while maintaining professional security standards.
+### 4. Initialize the database
 
+```powershell
+python src\init_db.py
+```
+
+### 5. Run the application
+
+```powershell
+python main.py
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000
+```
+
+## Security Notes
+
+This project is suitable for a class assignment and demonstrates important security concepts:
+
+- Passwords are not stored in plaintext.
+- SQL queries use parameters.
+- Sessions are used to keep users logged in.
+- Admin and user roles are separated.
+- The old password cannot be recovered during password reset.
+
+For a real production system, the project should be improved with:
+
+- A stronger password hashing algorithm such as bcrypt or Argon2.
+- A secret key stored in an environment variable instead of directly in the code.
+- A safer password reset process using a temporary reset token.
+- CSRF protection for forms.
+- Stronger password rules.
+
+## Current Implementation Status
+
+Implemented:
+
+- Layered backend structure.
+- Login system.
+- Standard user registration.
+- SHA-256 password hashing.
+- SQLite database.
+- Admin and user separation.
+- Forgot password and reset password pages.
+- Logout.
+- Login error messages.
+- Cleaned CSS without missing image dependencies.
+
+Not implemented:
+
+- New user registration.
+- Admin user management panel.
+- Email-based password reset.
+- Production-level security hardening.
