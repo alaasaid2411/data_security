@@ -18,7 +18,7 @@
             <div class="sponge-head"></div>
 
             <div class="login-content">
-                <h1>Login to Bikini Bottom</h1>
+                <h1>Login</h1>
                 <p class="subtitle">Enter your credentials to continue.</p>
 
                 <form method="POST" action="/login" class="login-form">
@@ -35,7 +35,12 @@
                     <button type="submit" class="login-btn">Login</button>
                 </form>
 
+                {% if message %}
+                <div class="message error">{{ message }}</div>
+                {% endif %}
+
                 <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+                <a href="/register" class="secondary-link">Create New Account</a>
             </div>
         </div>
 

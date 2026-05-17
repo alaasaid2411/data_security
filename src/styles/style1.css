@@ -142,15 +142,18 @@ button:hover,
 }
 
 .forgot-link,
+.secondary-link,
 .link-area a {
     display: inline-block;
     margin-top: 18px;
+    margin-right: 16px;
     color: var(--accent);
     text-decoration: none;
     font-weight: 600;
 }
 
 .forgot-link:hover,
+.secondary-link:hover,
 .link-area a:hover {
     text-decoration: underline;
 }
@@ -200,102 +203,4 @@ button:hover,
     .page-wrapper {
         padding: 16px;
     }
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background-image: url("/static/spongebob_login.jpeg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.login-overlay {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 20px;
-}
-
-.login-card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(6px);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    text-align: center;
-}
-
-.login-card h1 {
-    margin-bottom: 10px;
-    color: #0f4c81;
-}
-
-.subtitle {
-    color: #444;
-    margin-bottom: 20px;
-}
-
-.login-card form {
-    text-align: left;
-}
-
-.login-card label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #1f2937;
-}
-
-.login-card input[type="text"],
-.login-card input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    font-size: 15px;
-    box-sizing: border-box;
-}
-
-.login-card button {
-    width: 100%;
-    padding: 12px;
-    background: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.login-card button:hover {
-    background: #1d4ed8;
-}
-
-.link-area {
-    margin-top: 16px;
-}
-
-.link-area a {
-    color: #0f4c81;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.link-area a:hover {
-    text-decoration: underline;
-}
-
-.message {
-    margin-top: 16px;
-    color: #b91c1c;
-    font-weight: bold;
 }

@@ -1,12 +1,16 @@
 import sqlite3
-import hashlib
-#calss to intilize the database and create the table and insert data into it
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+try:
+    from src.database import DATABASE_PATH
+    from src.security import PasswordHasher
+except ModuleNotFoundError:
+    from database import DATABASE_PATH
+    from security import PasswordHasher
 
 
-conn = sqlite3.connect("users.db")
+# Initialize the database and insert the first admin and standard user.
+password_hasher = PasswordHasher()
+conn = sqlite3.connect(DATABASE_PATH)
 cursor = conn.cursor()
 
 cursor.execute("DROP TABLE IF EXISTS users")
@@ -21,8 +25,8 @@ CREATE TABLE users (
 )
 """)
 
-admin_password = hash_password("admin123")
-user_password = hash_password("user123")
+admin_password = password_hasher.hash("admin123")
+user_password = password_hasher.hash("user123")
 
 # Insert initial admin into the database
 cursor.execute(
